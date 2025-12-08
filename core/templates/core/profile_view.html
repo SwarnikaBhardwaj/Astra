@@ -1,0 +1,338 @@
+{% extends 'core/base.html' %}
+
+{% block title %}{{ profile_user.get_full_name }} - Astra{% endblock %}
+
+{% block extra_css %}
+<style>
+    .profile-avatar {
+        width: 140px;
+        height: 140px;
+        object-fit: cover;
+        border: 4px solid var(--golden-orange);
+        box-shadow: 0 8px 25px rgba(10, 46, 54, 0.15);
+    }
+
+    .profile-avatar-placeholder {
+        width: 140px;
+        height: 140px;
+        font-size: 3.5rem;
+        background: linear-gradient(135deg, var(--deep-azure) 0%, var(--rich-azure) 100%);
+        color: var(--golden-orange);
+        border: 4px solid var(--golden-orange);
+        box-shadow: 0 8px 25px rgba(10, 46, 54, 0.15);
+        font-family: 'Cormorant Garamond', serif;
+        font-weight: 600;
+    }
+
+    .profile-name {
+        font-family: 'Cormorant Garamond', serif;
+        color: var(--deep-azure);
+        font-size: 2rem;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+    }
+
+    .profile-username {
+        color: var(--text-secondary);
+        font-size: 1rem;
+        font-weight: 500;
+    }
+
+    .mentor-badge {
+        background: linear-gradient(135deg, var(--golden-orange) 0%, var(--gold-accent) 100%);
+        color: var(--deep-azure);
+        padding: 0.5rem 1.2rem;
+        border-radius: 25px;
+        font-weight: 600;
+        display: inline-block;
+        box-shadow: 0 4px 15px rgba(212, 165, 116, 0.3);
+    }
+
+    .stat-number {
+        font-size: 1.8rem;
+        font-weight: 700;
+        color: var(--deep-azure);
+        font-family: 'Cormorant Garamond', serif;
+    }
+
+    .stat-label {
+        font-size: 0.85rem;
+        color: var(--text-secondary);
+        font-weight: 500;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .reputation-score {
+        color: var(--golden-orange);
+    }
+
+    .skill-badge {
+        background: linear-gradient(135deg, var(--deep-azure) 0%, var(--rich-azure) 100%);
+        color: var(--soft-cream);
+        padding: 0.5rem 1rem;
+        border-radius: 20px;
+        font-weight: 500;
+        display: inline-block;
+        margin: 0.25rem;
+        transition: all 0.3s ease;
+    }
+
+    .skill-badge:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(10, 46, 54, 0.2);
+    }
+
+    .section-title {
+        font-family: 'Cormorant Garamond', serif;
+        color: var(--deep-azure);
+        font-size: 1.5rem;
+        font-weight: 600;
+        margin-bottom: 1rem;
+    }
+
+    .section-title i {
+        color: var(--golden-orange);
+    }
+
+    .badge-item {
+        padding: 0.75rem;
+        border-radius: 12px;
+        background: linear-gradient(135deg, var(--soft-cream) 0%, var(--pure-white) 100%);
+        margin-bottom: 0.75rem;
+        border: 2px solid rgba(212, 165, 116, 0.2);
+        transition: all 0.3s ease;
+    }
+
+    .badge-item:hover {
+        border-color: var(--golden-orange);
+        transform: translateX(5px);
+    }
+
+    .badge-icon {
+        font-size: 1.8rem;
+        margin-right: 0.75rem;
+    }
+
+    .badge-name {
+        color: var(--deep-azure);
+        font-weight: 600;
+        font-size: 1.05rem;
+    }
+
+    .post-card {
+        transition: all 0.3s ease;
+    }
+
+    .post-card:hover {
+        transform: translateY(-3px);
+    }
+
+    .hub-badge {
+        background: linear-gradient(135deg, var(--deep-azure) 0%, var(--rich-azure) 100%);
+        color: var(--golden-orange);
+        padding: 0.4rem 1rem;
+        border-radius: 20px;
+        font-weight: 600;
+        text-decoration: none;
+        display: inline-block;
+        transition: all 0.3s ease;
+    }
+
+    .hub-badge:hover {
+        transform: scale(1.05);
+        box-shadow: 0 4px 15px rgba(10, 46, 54, 0.2);
+        color: var(--gold-accent);
+    }
+
+    .post-title-link {
+        color: var(--deep-azure);
+        text-decoration: none;
+        font-family: 'Cormorant Garamond', serif;
+        font-size: 1.4rem;
+        font-weight: 600;
+        transition: color 0.3s ease;
+    }
+
+    .post-title-link:hover {
+        color: var(--golden-orange);
+    }
+
+    .post-icon {
+        margin-right: 0.5rem;
+    }
+
+    .post-icon.heart {
+        color: var(--deep-azure);
+    }
+
+    .post-icon.chat {
+        color: var(--golden-orange);
+    }
+
+    .no-posts-alert {
+        background: linear-gradient(135deg, var(--soft-cream) 0%, var(--pure-white) 100%);
+        border: 2px solid var(--golden-orange);
+        color: var(--text-primary);
+        border-radius: 15px;
+        padding: 1.5rem;
+        text-align: center;
+        font-weight: 500;
+    }
+
+    .btn-outline-primary {
+        border: 2px solid var(--deep-azure);
+        color: var(--deep-azure);
+        background: transparent;
+        padding: 0.65rem 1.8rem;
+        border-radius: 50px;
+        font-weight: 600;
+        letter-spacing: 0.5px;
+        transition: all 0.4s ease;
+    }
+
+    .btn-outline-primary:hover {
+        background: linear-gradient(135deg, var(--deep-azure) 0%, var(--rich-azure) 100%);
+        color: white;
+        border-color: var(--golden-orange);
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(10, 46, 54, 0.3);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row">
+        <div class="col-lg-4 mb-4">
+            <!-- Profile Card -->
+            <div class="card">
+                <div class="card-body text-center p-4">
+                    {% if profile.profile_image %}
+                        <img src="{{ profile.profile_image.url }}" alt="Profile" class="rounded-circle mb-3 profile-avatar">
+                    {% else %}
+                        <div class="rounded-circle d-inline-flex align-items-center justify-content-center mb-3 profile-avatar-placeholder">
+                            {{ profile_user.first_name.0 }}
+                        </div>
+                    {% endif %}
+
+                    <h3 class="profile-name">{{ profile_user.get_full_name }}</h3>
+                    <p class="profile-username mb-3">@{{ profile_user.username }}</p>
+
+                    {% if profile.is_mentor %}
+                        <span class="mentor-badge mb-3">
+                            <i class="bi bi-star-fill me-1"></i>Mentor
+                        </span>
+                    {% endif %}
+
+                    {% if profile.location %}
+                        <p class="text-muted mb-3">
+                            <i class="bi bi-geo-alt me-1"></i>{{ profile.location }}
+                        </p>
+                    {% endif %}
+
+                    <p class="mb-4" style="color: var(--text-secondary);">{{ profile.bio }}</p>
+
+                    <div class="mb-4">
+                        <div class="row text-center">
+                            <div class="col-4">
+                                <strong class="d-block stat-number">{{ profile.post_count }}</strong>
+                                <small class="stat-label">Posts</small>
+                            </div>
+                            <div class="col-4">
+                                <strong class="d-block stat-number">{{ profile.comment_count }}</strong>
+                                <small class="stat-label">Comments</small>
+                            </div>
+                            <div class="col-4">
+                                <strong class="d-block stat-number reputation-score">{{ profile.reputation_score }}</strong>
+                                <small class="stat-label">Reputation</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    {% if user == profile_user %}
+                        <a href="{% url 'core:profile_edit' profile_user.username %}" class="btn btn-accent w-100 mb-2">
+                            <i class="bi bi-pencil me-2"></i>Edit Profile
+                        </a>
+                        <a href="{% url 'core:export_portfolio' profile_user.username %}" class="btn btn-outline-primary w-100">
+                            <i class="bi bi-download me-2"></i>Export Portfolio CSV
+                        </a>
+                    {% elif user.is_authenticated and profile.is_mentor %}
+                        <a href="{% url 'core:request_mentorship' profile_user.username %}" class="btn btn-accent w-100">
+                            <i class="bi bi-envelope me-2"></i>Request Mentorship
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Skills -->
+            {% if profile.skills.exists %}
+            <div class="card mt-4">
+                <div class="card-body">
+                    <h5 class="section-title">
+                        <i class="bi bi-lightbulb me-2"></i>Skills
+                    </h5>
+                    <div>
+                        {% for skill in profile.skills.all %}
+                            <span class="skill-badge">{{ skill.name }}</span>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Badges -->
+            {% if profile.equity_badges.exists %}
+            <div class="card mt-4">
+                <div class="card-body">
+                    <h5 class="section-title">
+                        <i class="bi bi-award me-2"></i>Badges
+                    </h5>
+                    {% for badge in profile.equity_badges.all %}
+                        <div class="badge-item d-flex align-items-center">
+                            <span class="badge-icon">{{ badge.icon }}</span>
+                            <strong class="badge-name">{{ badge.name }}</strong>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+        </div>
+
+        <div class="col-lg-8">
+            <h4 class="section-title mb-4">Recent Posts</h4>
+
+            {% for post in posts %}
+            <div class="card mb-3 post-card">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                        <a href="{% url 'core:hub_detail' post.hub.slug %}" class="hub-badge">
+                            {{ post.hub.icon }} {{ post.hub.name }}
+                        </a>
+                        <small class="text-muted">{{ post.created_at|timesince }} ago</small>
+                    </div>
+
+                    <h5 class="mb-3">
+                        <a href="{% url 'core:post_detail' post.pk %}" class="post-title-link">
+                            {{ post.title }}
+                        </a>
+                    </h5>
+
+                    <p class="card-text" style="color: var(--text-secondary);">{{ post.content|truncatewords:20 }}</p>
+
+                    <small class="text-muted">
+                        <i class="bi bi-heart post-icon heart"></i> {{ post.helpful_count }} •
+                        <i class="bi bi-chat post-icon chat"></i> {{ post.comment_count }}
+                    </small>
+                </div>
+            </div>
+            {% empty %}
+            <div class="no-posts-alert">
+                <i class="bi bi-inbox" style="font-size: 2rem; color: var(--golden-orange); display: block; margin-bottom: 0.5rem;"></i>
+                No posts yet.
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

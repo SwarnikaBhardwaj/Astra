@@ -1,0 +1,210 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Find Mentors - Astra{% endblock %}
+
+{% block extra_css %}
+<style>
+    .page-header {
+        text-align: center;
+        margin-bottom: 3rem;
+    }
+
+    .page-header h1 {
+        font-family: 'Cormorant Garamond', serif;
+        font-size: 3rem;
+        font-weight: 600;
+        color: var(--deep-azure);
+        margin-bottom: 1rem;
+    }
+
+    .page-header p {
+        color: var(--text-secondary);
+        font-size: 1.2rem;
+        font-style: italic;
+    }
+
+    .mentor-card {
+        height: 100%;
+        transition: all 0.4s ease;
+    }
+
+    .mentor-card:hover {
+        transform: translateY(-8px);
+    }
+
+    .mentor-avatar {
+        width: 100px;
+        height: 100px;
+        object-fit: cover;
+        border: 3px solid var(--golden-orange);
+        box-shadow: 0 6px 20px rgba(10, 46, 54, 0.15);
+    }
+
+    .mentor-avatar-placeholder {
+        width: 100px;
+        height: 100px;
+        background: linear-gradient(135deg, var(--deep-azure) 0%, var(--rich-azure) 100%);
+        color: var(--golden-orange);
+        font-size: 2.5rem;
+        font-family: 'Cormorant Garamond', serif;
+        font-weight: 600;
+        border: 3px solid var(--golden-orange);
+        box-shadow: 0 6px 20px rgba(10, 46, 54, 0.15);
+    }
+
+    .mentor-name {
+        font-family: 'Cormorant Garamond', serif;
+        font-size: 1.5rem;
+        font-weight: 600;
+        color: var(--deep-azure);
+        margin-bottom: 0.5rem;
+    }
+
+    .mentor-location {
+        color: var(--text-secondary);
+        font-size: 0.9rem;
+    }
+
+    .mentor-location i {
+        color: var(--golden-orange);
+    }
+
+    .mentor-bio {
+        color: var(--text-secondary);
+        font-size: 0.95rem;
+        line-height: 1.6;
+    }
+
+    .skill-badge {
+        background: linear-gradient(135deg, var(--deep-azure) 0%, var(--rich-azure) 100%);
+        color: var(--soft-cream);
+        padding: 0.4rem 0.9rem;
+        border-radius: 20px;
+        font-weight: 500;
+        font-size: 0.85rem;
+        display: inline-block;
+        margin: 0.2rem;
+    }
+
+    .skill-more {
+        background: var(--golden-orange);
+        color: var(--deep-azure);
+        padding: 0.4rem 0.9rem;
+        border-radius: 20px;
+        font-weight: 600;
+        font-size: 0.85rem;
+        display: inline-block;
+        margin: 0.2rem;
+    }
+
+    .btn-view-profile {
+        border: 2px solid var(--deep-azure);
+        color: var(--deep-azure);
+        background: transparent;
+        padding: 0.6rem 1.5rem;
+        border-radius: 50px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+
+    .btn-view-profile:hover {
+        background: linear-gradient(135deg, var(--deep-azure) 0%, var(--rich-azure) 100%);
+        color: white;
+        border-color: var(--golden-orange);
+        transform: translateY(-2px);
+    }
+
+    .btn-request-mentorship {
+        background: linear-gradient(135deg, var(--deep-azure) 0%, var(--rich-azure) 100%);
+        color: white;
+        padding: 0.6rem 1.5rem;
+        border-radius: 50px;
+        border: 2px solid transparent;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+
+    .btn-request-mentorship:hover {
+        border-color: var(--golden-orange);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(10, 46, 54, 0.25);
+        color: white;
+    }
+
+    .no-mentors-alert {
+        background: linear-gradient(135deg, var(--soft-cream) 0%, var(--pure-white) 100%);
+        border: 2px solid var(--golden-orange);
+        color: var(--text-primary);
+        border-radius: 15px;
+        padding: 2rem;
+        text-align: center;
+        font-weight: 500;
+    }
+
+    .no-mentors-alert i {
+        font-size: 3rem;
+        color: var(--golden-orange);
+        display: block;
+        margin-bottom: 1rem;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="page-header">
+        <h1>Find a Mentor</h1>
+        <p>Connect with experienced women who can guide your journey</p>
+    </div>
+
+    <div class="row g-4">
+        {% for mentor in mentors %}
+        <div class="col-md-6 col-lg-4">
+            <div class="card mentor-card">
+                <div class="card-body text-center">
+                    {% if mentor.profile_image %}
+                        <img src="{{ mentor.profile_image.url }}" alt="Profile" class="rounded-circle mb-3 mentor-avatar">
+                    {% else %}
+                        <div class="rounded-circle d-inline-flex align-items-center justify-content-center mb-3 mentor-avatar-placeholder">
+                            {{ mentor.user.first_name.0 }}
+                        </div>
+                    {% endif %}
+
+                    <h5 class="mentor-name">{{ mentor.user.get_full_name }}</h5>
+                    <p class="mentor-location mb-3">
+                        <i class="bi bi-geo-alt"></i> {{ mentor.location|default:"Remote" }}
+                    </p>
+
+                    <p class="mentor-bio mb-3">{{ mentor.bio|truncatewords:20 }}</p>
+
+                    <div class="mb-3">
+                        {% for skill in mentor.skills.all|slice:":3" %}
+                            <span class="skill-badge">{{ skill.name }}</span>
+                        {% endfor %}
+                        {% if mentor.skills.count > 3 %}
+                            <span class="skill-more">+{{ mentor.skills.count|add:"-3" }} more</span>
+                        {% endif %}
+                    </div>
+
+                    <div class="d-grid gap-2">
+                        <a href="{% url 'core:profile_view' mentor.user.username %}" class="btn btn-view-profile">View Profile</a>
+                        {% if user.is_authenticated and user != mentor.user %}
+                            <a href="{% url 'core:request_mentorship' mentor.user.username %}" class="btn btn-request-mentorship">
+                                <i class="bi bi-envelope me-1"></i>Request Mentorship
+                            </a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12">
+            <div class="no-mentors-alert">
+                <i class="bi bi-people"></i>
+                <p class="mb-0">No mentors available yet. Check back soon!</p>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

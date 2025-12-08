@@ -1,0 +1,31 @@
+{% extends 'core/base.html' %}
+
+{% block title %}About - Astra{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8 text-center">
+            <h1 class="display-4 fw-bold mb-4">About Astra</h1>
+            <p class="lead mb-5">Empowering women through knowledge, connection, and opportunity.</p>
+
+            <div class="text-start">
+                <h3 class="mb-3">Our Mission</h3>
+                <p>Astra is a safe, signal-first platform where women can learn from high-quality content, connect with mentors, and access opportunities—all without the noise, harassment, or gatekeeping found elsewhere.</p>
+
+                <h3 class="mt-5 mb-3">What Makes Us Different</h3>
+                <ul class="list-unstyled">
+                    <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i>Safety by design with privacy controls</li>
+                    <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i>Signal over status - elevate practical knowledge</li>
+                    <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i>Equity badges recognize non-traditional contributions</li>
+                    <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i>Mentorship matching for real connections</li>
+                </ul>
+
+                <div class="text-center mt-5">
+                    <a href="{% url 'core:signup' %}" class="btn btn-primary btn-lg">Join Our Community</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

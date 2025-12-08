@@ -1,0 +1,85 @@
+{% extends 'core/base.html' %}
+
+{% block title %}{{ hub.name }} - Astra{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <!-- Hub Header -->
+    <div class="card mb-4 shadow-sm">
+        <div class="card-body p-4">
+            <div class="row align-items-center">
+                <div class="col-md-8">
+                    <div class="d-flex align-items-center mb-3">
+                        <div style="font-size: 3rem;" class="me-3">{{  }}</div>
+                        <div>
+                            <h2 class="mb-1">{{ hub.name }}</h2>
+                            <p class="text-muted mb-0">{{ hub.description }}</p>
+                        </div>
+                    </div>
+                    <div class="text-muted">
+                        <i class="bi bi-people me-1"></i>{{ hub.member_count }} members •
+                        <i class="bi bi-file-text ms-2 me-1"></i>{{ hub.post_count }} posts
+                    </div>
+                </div>
+                <div class="col-md-4 text-md-end mt-3 mt-md-0">
+                    {% if user.is_authenticated %}
+                        {% if is_member %}
+                            <a href="{% url 'core:join_hub' hub.slug %}" class="btn btn-outline-secondary">
+                                <i class="bi bi-check-circle me-2"></i>Joined
+                            </a>
+                        {% else %}
+                            <a href="{% url 'core:join_hub' hub.slug %}" class="btn btn-primary">
+                                <i class="bi bi-plus-circle me-2"></i>Join Hub
+                            </a>
+                        {% endif %}
+                    {% else %}
+                        <a href="{% url 'core:login' %}" class="btn btn-primary">Login to Join</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Posts -->
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h4>Recent Posts</h4>
+        {% if user.is_authenticated %}
+            <a href="{% url 'core:post_create' %}" class="btn btn-primary">
+                <i class="bi bi-plus-circle me-2"></i>Create Post
+            </a>
+        {% endif %}
+    </div>
+
+    {% for post in posts %}
+    <div class="card mb-3">
+        <div class="card-body">
+            <div class="d-flex justify-content-between align-items-start mb-2">
+                <span class="badge bg-secondary">{{ post.get_post_type_display }}</span>
+                <small class="text-muted">{{ post.created_at|timesince }} ago</small>
+            </div>
+
+            <h5 class="card-title">
+                <a href="{% url 'core:post_detail' post.pk %}" class="text-decoration-none text-dark">
+                    {{ post.title }}
+                </a>
+            </h5>
+
+            <p class="card-text">{{ post.content|truncatewords:30 }}</p>
+
+            <div class="d-flex justify-content-between align-items-center">
+                <small class="text-muted">
+                    By {{ post.get_author_display }} •
+                    <i class="bi bi-heart"></i> {{ post.helpful_count }} •
+                    <i class="bi bi-chat"></i> {{ post.comment_count }}
+                </small>
+                <a href="{% url 'core:post_detail' post.pk %}" class="btn btn-sm btn-outline-primary">Read More</a>
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <div class="alert alert-info">
+        No posts yet in this hub. Be the first to share!
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

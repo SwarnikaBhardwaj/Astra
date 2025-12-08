@@ -1,0 +1,114 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Mentorship Dashboard - Astra{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <h2 class="mb-4">
+        <i class="bi bi-people me-2"></i>Mentorship Dashboard
+    </h2>
+
+    <div class="row">
+        <!-- Requests Sent -->
+        <div class="col-lg-6 mb-4">
+            <div class="card shadow-sm h-100">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">
+                        <i class="bi bi-send me-2"></i>Requests I've Sent
+                    </h5>
+                </div>
+                <div class="card-body">
+                    {% for request in sent_requests %}
+                    <div class="mb-3 pb-3 {% if not forloop.last %}border-bottom{% endif %}">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <h6 class="mb-0">{{ request.topic }}</h6>
+                            {% if request.status == 'pending' %}
+                                <span class="badge bg-warning text-dark">Pending</span>
+                            {% elif request.status == 'accepted' %}
+                                <span class="badge bg-success">Accepted</span>
+                            {% elif request.status == 'declined' %}
+                                <span class="badge bg-danger">Declined</span>
+                            {% else %}
+                                <span class="badge bg-secondary">{{ request.get_status_display }}</span>
+                            {% endif %}
+                        </div>
+                        <p class="small text-muted mb-1">
+                            <strong>To:</strong> {{ request.mentor.get_full_name }}
+                        </p>
+                        <p class="small mb-1">{{ request.message|truncatewords:15 }}</p>
+                        <small class="text-muted">{{ request.created_at|timesince }} ago</small>
+                    </div>
+                    {% empty %}
+                    <div class="text-center text-muted py-4">
+                        <i class="bi bi-inbox" style="font-size: 2rem;"></i>
+                        <p class="mt-2 mb-0">No requests sent yet.</p>
+                        <a href="{% url 'core:mentor_list' %}" class="btn btn-sm btn-primary mt-3">Find Mentors</a>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Requests Received -->
+        <div class="col-lg-6 mb-4">
+            <div class="card shadow-sm h-100">
+                <div class="card-header bg-success text-white">
+                    <h5 class="mb-0">
+                        <i class="bi bi-inbox me-2"></i>Requests I've Received
+                    </h5>
+                </div>
+                <div class="card-body">
+                    {% for request in received_requests %}
+                    <div class="mb-3 pb-3 {% if not forloop.last %}border-bottom{% endif %}">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <h6 class="mb-0">{{ request.topic }}</h6>
+                            {% if request.status == 'pending' %}
+                                <span class="badge bg-warning text-dark">Pending</span>
+                            {% elif request.status == 'accepted' %}
+                                <span class="badge bg-success">Accepted</span>
+                            {% elif request.status == 'declined' %}
+                                <span class="badge bg-danger">Declined</span>
+                            {% else %}
+                                <span class="badge bg-secondary">{{ request.get_status_display }}</span>
+                            {% endif %}
+                        </div>
+                        <p class="small text-muted mb-1">
+                            <strong>From:</strong> {{ request.mentee.get_full_name }}
+                        </p>
+                        <p class="small mb-2">{{ request.message }}</p>
+                        <small class="text-muted">{{ request.created_at|timesince }} ago</small>
+
+                        {% if request.status == 'pending' %}
+                        <div class="mt-2">
+                            <form method="post" action="{% url 'core:update_mentorship_status' request.pk %}" class="d-inline">
+                                {% csrf_token %}
+                                <input type="hidden" name="status" value="accepted">
+                                <button type="submit" class="btn btn-sm btn-success me-2">
+                                    <i class="bi bi-check-circle me-1"></i>Accept
+                                </button>
+                            </form>
+                            <form method="post" action="{% url 'core:update_mentorship_status' request.pk %}" class="d-inline">
+                                {% csrf_token %}
+                                <input type="hidden" name="status" value="declined">
+                                <button type="submit" class="btn btn-sm btn-outline-danger">
+                                    <i class="bi bi-x-circle me-1"></i>Decline
+                                </button>
+                            </form>
+                        </div>
+                        {% endif %}
+                    </div>
+                    {% empty %}
+                    <div class="text-center text-muted py-4">
+                        <i class="bi bi-inbox" style="font-size: 2rem;"></i>
+                        <p class="mt-2 mb-0">No requests received yet.</p>
+                        {% if not user.profile.is_mentor %}
+                            <p class="small">Enable "I'm a Mentor" in your profile to receive requests.</p>
+                        {% endif %}
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

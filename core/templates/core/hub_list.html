@@ -1,0 +1,35 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Explore Hubs - Astra{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="text-center mb-5">
+        <h1 class="display-5 fw-bold">Explore Communities</h1>
+        <p class="lead text-muted">Find your community and start learning together</p>
+    </div>
+
+    <div class="row g-4">
+        {% for hub in hubs %}
+        <div class="col-md-6 col-lg-4">
+            <div class="card h-100">
+                <div class="card-body">
+
+                    <h5 class="card-title text-center mb-3">{{ hub.name }}</h5>
+                    <p class="card-text text-muted">{{ hub.description }}</p>
+
+                    <div class="d-flex justify-content-between text-muted small mb-3">
+                        <span><i class="bi bi-people"></i> {{ hub.member_count }} members</span>
+                        <span><i class="bi bi-file-text"></i> {{ hub.post_count }} posts</span>
+                    </div>
+
+                    <a href="{% url 'core:hub_detail' hub.slug %}" class="btn btn-primary w-100">
+                        Explore Hub
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

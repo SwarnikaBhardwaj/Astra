@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Astra{% endblock %}</title>
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600;700&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --deep-azure: #0A2E36;
+            --rich-azure: #0D3B44;
+            --accent-azure: #1A5560;
+            --golden-orange: #D4A574;
+            --gold-accent: #E8C291;
+            --soft-cream: #FFF9F0;
+            --pure-white: #FFFFFF;
+            --text-primary: #0A2E36;
+            --text-secondary: #4A5F63;
+            --mandala-pattern: radial-gradient(circle at center, transparent 40%, rgba(212, 165, 116, 0.03) 41%, transparent 42%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background: linear-gradient(135deg, var(--soft-cream) 0%, #FFFFFF 50%, var(--soft-cream) 100%);
+            color: var(--text-primary);
+            position: relative;
+            min-height: 100vh;
+        }
+
+        /* Subtle mandala background pattern */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image:
+                radial-gradient(circle at 20% 30%, rgba(212, 165, 116, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(10, 46, 54, 0.03) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* Sacred geometry accent */
+        .mandala-accent {
+            position: fixed;
+            top: -100px;
+            right: -100px;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(212, 165, 116, 0.08) 0%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* NAVBAR — Regal and divine */
+        .navbar {
+            background: linear-gradient(180deg, var(--pure-white) 0%, rgba(255, 255, 255, 0.98) 100%);
+            backdrop-filter: blur(10px);
+            border-bottom: 2px solid transparent;
+            border-image: linear-gradient(90deg, transparent, var(--golden-orange), transparent) 1;
+            padding: 1rem 0;
+            position: relative;
+            z-index: 1000;
+            box-shadow: 0 4px 20px rgba(10, 46, 54, 0.05);
+        }
+
+        .navbar-brand {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2.5rem;
+            font-weight: 600;
+            background: linear-gradient(135deg, var(--deep-azure) 0%, var(--accent-azure) 50%, var(--golden-orange) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: 2px;
+            position: relative;
+            padding: 0 1rem;
+        }
+
+        .navbar-brand::before {
+            content: '✦';
+            position: absolute;
+            left: -5px;
+            color: var(--golden-orange);
+            font-size: 0.6em;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .navbar-brand::after {
+            content: '✦';
+            position: absolute;
+            right: -5px;
+            color: var(--golden-orange);
+            font-size: 0.6em;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .nav-link {
+            color: var(--text-primary) !important;
+            font-weight: 500;
+            padding: 0.6rem 1.2rem !important;
+            position: relative;
+            letter-spacing: 0.5px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-link:hover {
+            color: var(--accent-azure) !important;
+        }
+
+        .nav-link::after {
+            content: "";
+            position: absolute;
+            width: 0%;
+            height: 2px;
+            left: 50%;
+            bottom: 0;
+            background: linear-gradient(90deg, transparent, var(--golden-orange), transparent);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            transform: translateX(-50%);
+        }
+
+        .nav-link:hover::after {
+            width: 80%;
+        }
+
+        /* BUTTONS — Royal and elegant */
+        .btn-accent,
+        .btn-primary,
+        .btn {
+            background: linear-gradient(135deg, var(--deep-azure) 0%, var(--rich-azure) 100%) !important;
+            color: white !important;
+            padding: 0.65rem 1.8rem;
+            border-radius: 50px;
+            border: 2px solid transparent !important;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s ease;
+        }
+
+        .btn-accent::before,
+        .btn-primary::before,
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(212, 165, 116, 0.3), transparent);
+            transition: left 0.6s ease;
+        }
+
+        .btn-accent:hover,
+        .btn-primary:hover,
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(10, 46, 54, 0.3);
+            border-color: var(--golden-orange) !important;
+            background: linear-gradient(135deg, var(--rich-azure) 0%, var(--accent-azure) 100%) !important;
+        }
+
+        .btn-accent:hover::before,
+        .btn-primary:hover::before,
+        .btn::before:hover {
+            left: 100%;
+        }
+
+        /* Badges - Dark Azure styling */
+        .badge,
+        .badge-primary {
+            background: var(--deep-azure) !important;
+            color: white !important;
+            padding: 0.4rem 0.9rem;
+            border-radius: 20px;
+            font-weight: 500;
+            letter-spacing: 0.3px;
+        }
+
+        /* Links - Dark Azure */
+        a {
+            color: var(--deep-azure);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        a:hover {
+            color: var(--golden-orange);
+        }
+
+        /* Text utilities */
+        .text-primary {
+            color: var(--deep-azure) !important;
+        }
+
+        /* Border utilities */
+        .border-primary {
+            border-color: var(--deep-azure) !important;
+        }
+
+        /* CARDS — Sacred and sophisticated */
+        .card {
+            border: none;
+            border-radius: 20px;
+            padding: 1.5rem;
+            background: var(--pure-white);
+            box-shadow:
+                0 10px 40px rgba(10, 46, 54, 0.08),
+                inset 0 1px 0 rgba(212, 165, 116, 0.1);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s ease;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--deep-azure), var(--golden-orange), var(--deep-azure));
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow:
+                0 15px 50px rgba(10, 46, 54, 0.12),
+                inset 0 1px 0 rgba(212, 165, 116, 0.2);
+        }
+
+        .card-header {
+            background: linear-gradient(135deg, var(--soft-cream) 0%, var(--pure-white) 100%);
+            border-bottom: 2px solid var(--golden-orange);
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.6rem;
+            font-weight: 600;
+            color: var(--deep-azure);
+            padding: 1rem 1.5rem;
+            border-radius: 20px 20px 0 0;
+            position: relative;
+        }
+
+        .card-header::after {
+            content: '◆';
+            position: absolute;
+            right: 1.5rem;
+            color: var(--golden-orange);
+            font-size: 0.8em;
+        }
+
+        /* FORMS — Elegant and accessible */
+        .form-control, .form-select {
+            border: 2px solid rgba(10, 46, 54, 0.1);
+            border-radius: 12px;
+            padding: 0.8rem 1rem;
+            background: var(--pure-white);
+            transition: all 0.3s ease;
+            font-size: 0.95rem;
+        }
+
+        .form-control:focus, .form-select:focus {
+            border-color: var(--golden-orange);
+            box-shadow: 0 0 0 0.2rem rgba(212, 165, 116, 0.15);
+            background: var(--soft-cream);
+        }
+
+        .form-label {
+            font-weight: 600;
+            color: var(--deep-azure);
+            margin-bottom: 0.5rem;
+            letter-spacing: 0.3px;
+        }
+
+        /* DROPDOWN — Refined */
+        .dropdown-menu {
+            border-radius: 15px;
+            border: 2px solid rgba(212, 165, 116, 0.2);
+            box-shadow: 0 10px 40px rgba(10, 46, 54, 0.15);
+            padding: 0.5rem;
+            background: var(--pure-white);
+        }
+
+        .dropdown-item {
+            border-radius: 10px;
+            padding: 0.6rem 1rem;
+            transition: all 0.3s ease;
+            color: var(--text-primary);
+        }
+
+        .dropdown-item:hover {
+            background: linear-gradient(135deg, var(--deep-azure), var(--rich-azure));
+            color: var(--pure-white);
+            transform: translateX(5px);
+        }
+
+        /* ALERTS — Gentle and noticeable */
+        .alert {
+            border-radius: 15px;
+            border-left: 4px solid var(--golden-orange);
+            background: linear-gradient(135deg, var(--soft-cream), var(--pure-white));
+            box-shadow: 0 4px 15px rgba(10, 46, 54, 0.08);
+            padding: 1rem 1.5rem;
+        }
+
+        .alert-info {
+            border-left-color: var(--accent-azure);
+            color: var(--deep-azure);
+        }
+
+        /* FOOTER — Dignified closure */
+        footer {
+            margin-top: 6rem;
+            background: linear-gradient(180deg, var(--pure-white) 0%, var(--soft-cream) 100%);
+            padding: 3.5rem 0 2rem;
+            text-align: center;
+            color: var(--text-secondary);
+            border-top: 2px solid transparent;
+            border-image: linear-gradient(90deg, transparent, var(--golden-orange), transparent) 1;
+            position: relative;
+            z-index: 1;
+        }
+
+        footer::before {
+            content: '◆ ✦ ◆';
+            display: block;
+            text-align: center;
+            color: var(--golden-orange);
+            font-size: 0.9rem;
+            margin-bottom: 1.5rem;
+            letter-spacing: 8px;
+        }
+
+        footer h4 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2rem;
+            background: linear-gradient(135deg, var(--deep-azure), var(--golden-orange));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        footer p {
+            font-size: 1rem;
+            font-style: italic;
+            color: var(--text-secondary);
+        }
+
+        footer a {
+            color: var(--accent-azure);
+            font-weight: 500;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        footer a::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0;
+            height: 1px;
+            background: var(--golden-orange);
+            transition: width 0.3s ease;
+        }
+
+        footer a:hover {
+            color: var(--golden-orange);
+        }
+
+        footer a:hover::after {
+            width: 100%;
+        }
+
+        /* Main content spacing */
+        main {
+            position: relative;
+            z-index: 1;
+            min-height: calc(100vh - 400px);
+        }
+
+        /* Scrollbar styling */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--soft-cream);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(180deg, var(--deep-azure), var(--golden-orange));
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(180deg, var(--accent-azure), var(--gold-accent));
+        }
+
+        /* Loading animation accent */
+        @keyframes shimmer {
+            0% { background-position: -1000px 0; }
+            100% { background-position: 1000px 0; }
+        }
+
+        .shimmer {
+            background: linear-gradient(90deg, transparent, rgba(212, 165, 116, 0.1), transparent);
+            background-size: 1000px 100%;
+            animation: shimmer 2s infinite;
+        }
+    </style>
+
+    {% block extra_css %}{% endblock %}
+</head>
+
+<body>
+    <div class="mandala-accent"></div>
+
+    <!-- NAVBAR -->
+    <nav class="navbar navbar-expand-lg">
+        <div class="container">
+            <a class="navbar-brand" href="{% url 'core:home' %}">
+                Astra
+            </a>
+
+            <button class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#nav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="nav">
+                <ul class="navbar-nav ms-auto align-items-center">
+                    <li class="nav-item"><a class="nav-link" href="{% url 'core:home' %}">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'core:hub_list' %}">Hubs</a></li>
+
+                    {% if user.is_authenticated %}
+                        <li class="nav-item"><a class="nav-link" href="{% url 'core:mentor_list' %}">Mentors</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{% url 'core:post_create' %}">Create</a></li>
+
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
+                                <i class="bi bi-person-circle me-1"></i>{{ user.first_name }}
+                            </a>
+
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <li><a class="dropdown-item" href="{% url 'core:profile_view' user.username %}">My Profile</a></li>
+                                <li><a class="dropdown-item" href="{% url 'core:mentorship_dashboard' %}">Mentorship</a></li>
+
+                                {% if user.is_staff %}
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li><a class="dropdown-item" href="{% url 'core:analytics_dashboard' %}">Analytics</a></li>
+                                    <li><a class="dropdown-item" href="/admin/">Admin</a></li>
+                                {% endif %}
+
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="{% url 'core:logout' %}">Logout</a></li>
+                            </ul>
+                        </li>
+
+                    {% else %}
+                        <li class="nav-item"><a class="nav-link" href="{% url 'core:login' %}">Login</a></li>
+                        <li class="nav-item ms-2">
+                            <a class="btn btn-accent" href="{% url 'core:signup' %}">
+                                Join Astra
+                            </a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- ALERTS -->
+    {% if messages %}
+        <div class="container mt-3">
+            {% for message in messages %}
+                <div class="alert alert-info">
+                    <i class="bi bi-info-circle me-2"></i>{{ message }}
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <!-- MAIN CONTENT -->
+    <main class="container py-5">
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+        <h4>Astra</h4>
+        <p class="mt-2">Empowering women through knowledge, support & community.</p>
+
+        <div class="mt-4">
+            <a href="{% url 'core:about' %}" class="me-4">About</a>
+            <a href="#" class="me-4">Privacy</a>
+            <a href="#">Contact</a>
+        </div>
+
+        <p class="mt-4" style="font-size: 0.85rem; opacity: 0.7;">© 2025 Astra. All rights reserved.</p>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

@@ -1,0 +1,411 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Analytics Dashboard - Astra{% endblock %}
+
+{% block extra_css %}
+<style>
+    .stat-card {
+        background: linear-gradient(135deg, var(--deep-azure) 0%, var(--rich-azure) 100%);
+        color: var(--pure-white);
+        border: 2px solid var(--golden-orange);
+        border-radius: 20px;
+        padding: 2rem;
+        margin-bottom: 1rem;
+        box-shadow: 0 10px 40px rgba(10, 46, 54, 0.15);
+        position: relative;
+        overflow: hidden;
+        transition: all 0.4s ease;
+    }
+
+    .stat-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 3px;
+        background: linear-gradient(90deg, var(--golden-orange), var(--gold-accent), var(--golden-orange));
+    }
+
+    .stat-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 50px rgba(10, 46, 54, 0.25);
+    }
+
+    .stat-card h3 {
+        font-size: 2.8rem;
+        font-weight: bold;
+        margin-bottom: 0.5rem;
+        color: var(--golden-orange);
+        font-family: 'Cormorant Garamond', serif;
+    }
+
+    .stat-card p {
+        margin-bottom: 0;
+        color: var(--soft-cream);
+        font-weight: 500;
+        letter-spacing: 1px;
+        font-size: 0.95rem;
+    }
+
+    .chart-container {
+        background: linear-gradient(135deg, var(--pure-white) 0%, var(--soft-cream) 100%);
+        border: 2px solid rgba(212, 165, 116, 0.3);
+        border-radius: 20px;
+        padding: 2rem;
+        box-shadow: 0 10px 40px rgba(10, 46, 54, 0.08);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .chart-container::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 3px;
+        background: linear-gradient(90deg, var(--deep-azure), var(--golden-orange), var(--deep-azure));
+    }
+
+    .chart-container h5 {
+        color: var(--deep-azure);
+        margin-bottom: 1.5rem;
+        font-family: 'Cormorant Garamond', serif;
+        font-size: 1.5rem;
+        font-weight: 600;
+    }
+
+    .dashboard-title {
+        font-family: 'Cormorant Garamond', serif;
+        color: var(--deep-azure);
+        font-size: 2.5rem;
+        font-weight: 600;
+        margin-bottom: 2rem;
+    }
+
+    .dashboard-title i {
+        color: var(--golden-orange);
+    }
+
+    .list-group-item {
+        background: var(--pure-white);
+        border: 1px solid rgba(10, 46, 54, 0.1);
+        color: var(--text-primary);
+        padding: 1rem 1.5rem;
+        transition: all 0.3s ease;
+    }
+
+    .list-group-item:hover {
+        background: var(--soft-cream);
+        transform: translateX(5px);
+    }
+
+    .badge.bg-warning {
+        background: linear-gradient(135deg, #FFA500, #FF8C00) !important;
+        color: white !important;
+        padding: 0.5rem 1rem;
+        border-radius: 20px;
+        font-weight: 600;
+    }
+
+    .badge.bg-success {
+        background: linear-gradient(135deg, #2D7A4F, #1F5738) !important;
+        color: white !important;
+        padding: 0.5rem 1rem;
+        border-radius: 20px;
+        font-weight: 600;
+    }
+
+    .badge.bg-secondary {
+        background: linear-gradient(135deg, #6C757D, #5A6268) !important;
+        color: white !important;
+        padding: 0.5rem 1rem;
+        border-radius: 20px;
+        font-weight: 600;
+    }
+
+    .table {
+        color: var(--text-primary);
+    }
+
+    .table thead th {
+        background: linear-gradient(135deg, var(--deep-azure), var(--rich-azure));
+        color: var(--pure-white);
+        border: none;
+        padding: 1rem;
+        font-weight: 600;
+    }
+
+    .table tbody tr {
+        transition: all 0.3s ease;
+    }
+
+    .table tbody tr:hover {
+        background: var(--soft-cream);
+    }
+
+    .table code {
+        background: rgba(10, 46, 54, 0.05);
+        color: var(--accent-azure);
+        padding: 0.3rem 0.6rem;
+        border-radius: 6px;
+        font-family: 'Courier New', monospace;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="dashboard-title">
+            <i class="bi bi-bar-chart-line me-2"></i>Analytics Dashboard
+        </h1>
+        <span class="badge" style="background: var(--deep-azure); padding: 0.6rem 1.2rem; border-radius: 25px; font-size: 0.9rem;">Staff Only</span>
+    </div>
+
+    <!-- Key Metrics -->
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="stat-card">
+                <h3>{{ total_users }}</h3>
+                <p>Total Users</p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stat-card">
+                <h3>{{ total_posts }}</h3>
+                <p>Total Posts</p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stat-card">
+                <h3>{{ total_comments }}</h3>
+                <p>Total Comments</p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stat-card">
+                <h3>{{ total_hubs }}</h3>
+                <p>Active Hubs</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Charts Row 1 -->
+    <div class="row mb-4">
+        <div class="col-lg-6 mb-4">
+            <div class="chart-container">
+                <h5>Hub Activity</h5>
+                <div id="hubChart" style="width: 100%;"></div>
+            </div>
+        </div>
+        <div class="col-lg-6 mb-4">
+            <div class="chart-container">
+                <h5>Top Skills</h5>
+                <div id="skillChart" style="width: 100%;"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Charts Row 2 -->
+    <div class="row mb-4">
+        <div class="col-lg-6 mb-4">
+            <div class="chart-container">
+                <h5>Mentorship Requests Status</h5>
+                <div id="mentorshipChart" style="width: 100%;"></div>
+            </div>
+        </div>
+        <div class="col-lg-6 mb-4">
+            <div class="chart-container">
+                <h5>Quick Stats</h5>
+                <ul class="list-group">
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        Pending Requests
+                        <span class="badge bg-warning">{{ mentorship_stats.pending }}</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        Accepted Requests
+                        <span class="badge bg-success">{{ mentorship_stats.accepted }}</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        Declined Requests
+                        <span class="badge" style="background: linear-gradient(135deg, var(--deep-azure), var(--rich-azure)) !important; color: white !important; padding: 0.5rem 1rem; border-radius: 20px; font-weight: 600;">{{ mentorship_stats.declined }}</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        Completed Requests
+                        <span class="badge bg-secondary">{{ mentorship_stats.completed }}</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- API Endpoints -->
+    <div class="card">
+        <div class="card-header">
+            <h5 class="mb-0">
+                <i class="bi bi-code-square me-2"></i>Available API Endpoints
+            </h5>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Endpoint</th>
+                            <th>Description</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>/api/hubs/</code></td>
+                            <td>All hubs with stats</td>
+                            <td><a href="/api/hubs/" target="_blank" class="btn btn-sm">View JSON</a></td>
+                        </tr>
+                        <tr>
+                            <td><code>/api/stats/platform/</code></td>
+                            <td>Platform-wide statistics</td>
+                            <td><a href="/api/stats/platform/" target="_blank" class="btn btn-sm">View JSON</a></td>
+                        </tr>
+                        <tr>
+                            <td><code>/api/stats/skills/</code></td>
+                            <td>Skills distribution</td>
+                            <td><a href="/api/stats/skills/" target="_blank" class="btn btn-sm">View JSON</a></td>
+                        </tr>
+                        <tr>
+                            <td><code>/api/stats/growth/</code></td>
+                            <td>Growth over time</td>
+                            <td><a href="/api/stats/growth/" target="_blank" class="btn btn-sm">View JSON</a></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
+<script src="https://cdn.jsdelivr.net/npm/vega-lite@5"></script>
+<script src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
+
+<script>
+console.log('=== Vega-Lite Debug Start ===');
+
+const hubDataRaw = '{{ hub_data|escapejs }}';
+const skillDataRaw = '{{ skill_data|escapejs }}';
+
+console.log('Raw hub_data:', hubDataRaw);
+console.log('Raw skill_data:', skillDataRaw);
+
+let hubData = [];
+let skillData = [];
+
+try { hubData = JSON.parse(hubDataRaw); } catch(e) { console.error(e); }
+try { skillData = JSON.parse(skillDataRaw); } catch(e) { console.error(e); }
+
+//
+// HUB CHART
+//
+if (hubData.length > 0) {
+    const hubSpec = {
+        "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+        "width": 500,
+        "height": 300,
+        "data": {"values": hubData},
+        "mark": {"type": "bar", "color": "#0A2E36"},
+        "encoding": {
+            "x": {
+                "field": "hub", "type": "nominal",
+                "axis": {"labelAngle": -45, "labelColor": "#0A2E36", "titleColor": "#0A2E36"},
+                "title": "Hub"
+            },
+            "y": {
+                "field": "posts", "type": "quantitative",
+                "axis": {"labelColor": "#0A2E36", "titleColor": "#0A2E36"},
+                "title": "Posts"
+            },
+            "tooltip": [
+                {"field": "hub", "title": "Hub"},
+                {"field": "posts", "title": "Posts"},
+                {"field": "members", "title": "Members"}
+            ]
+        },
+        "config": {"background": "#FFF9F0", "view": {"stroke": "#D4A574"}}
+    };
+    vegaEmbed("#hubChart", hubSpec, {actions: false});
+}
+
+//
+// SKILL CHART
+//
+if (skillData.length > 0) {
+    const skillSpec = {
+        "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+        "width": 500,
+        "height": 300,
+        "data": {"values": skillData},
+        "mark": {"type": "bar", "color": "#D4A574"},
+        "encoding": {
+            "y": {
+                "field": "skill", "type": "nominal", "sort": "-x",
+                "axis": {"labelColor": "#0A2E36", "titleColor": "#0A2E36"},
+                "title": "Skill"
+            },
+            "x": {
+                "field": "users", "type": "quantitative",
+                "axis": {"labelColor": "#0A2E36", "titleColor": "#0A2E36"},
+                "title": "Users"
+            },
+            "tooltip": [
+                {"field": "skill", "title": "Skill"},
+                {"field": "users", "title": "Users"}
+            ]
+        },
+        "config": {"background": "#FFF9F0", "view": {"stroke": "#D4A574"}}
+    };
+    vegaEmbed("#skillChart", skillSpec, {actions: false});
+}
+
+//
+// MENTORSHIP PIE CHART
+//
+const mentorshipData = [
+    {"status": "Pending", "count": {{ mentorship_stats.pending }}},
+    {"status": "Accepted", "count": {{ mentorship_stats.accepted }}},
+    {"status": "Declined", "count": {{ mentorship_stats.declined }}},
+    {"status": "Completed", "count": {{ mentorship_stats.completed }}}
+];
+
+const mentorshipSpec = {
+    "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+    "width": 500,
+    "height": 300,
+    "data": {"values": mentorshipData},
+    "mark": {"type": "arc", "innerRadius": 50},
+    "encoding": {
+        "theta": {"field": "count", "type": "quantitative"},
+        "color": {
+            "field": "status",
+            "scale": {
+                "domain": ["Pending", "Accepted", "Declined", "Completed"],
+                "range": ["#FFA500", "#2D7A4F", "#0A2E36", "#6C757D"]
+            },
+            "legend": {"labelColor": "#0A2E36", "titleColor": "#0A2E36"}
+        },
+        "tooltip": [
+            {"field": "status", "title": "Status"},
+            {"field": "count", "title": "Count"}
+        ]
+    },
+    "config": {"background": "#FFF9F0", "view": {"stroke": "#D4A574"}}
+};
+
+vegaEmbed("#mentorshipChart", mentorshipSpec, {actions: false});
+
+console.log('=== Vega-Lite Debug End ===');
+</script>
+{% endblock %}
