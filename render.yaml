@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: astra
+    env: python
+    buildCommand: "./build.sh"
+    startCommand: "gunicorn Astra.wsgi:application"
+    envVars:
+      - key: DJANGO_ENVIRONMENT
+        value: production
+      - key: SECRET_KEY
+        generateValue: true
+      - key: PYTHON_VERSION
+        value: 3.11.0

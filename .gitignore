@@ -1,0 +1,21 @@
+# Database
+*.sqlite3
+db.sqlite3
+
+# Static files
+/staticfiles
+/static
+
+# Media
+/media
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyc
+.Python
+venv/
+env/
+
+# Environment
+.env
