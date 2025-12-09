@@ -2,7 +2,7 @@ from .base import *
 
 DEBUG = False
 
-ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', '').split(',')
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'https://astra-ubml.onrender.com']
 
 # Security settings for production
 SECURE_SSL_REDIRECT = True

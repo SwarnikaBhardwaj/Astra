@@ -14,7 +14,7 @@ The whole design is a royal blue and gold theme - meant to feel powerful and wel
 
 ## Live Links
 
-Deployed Site: [Will add after deployment]
+Deployed Site: https://astra-ubml.onrender.com
 
 ## Test It Out
 
