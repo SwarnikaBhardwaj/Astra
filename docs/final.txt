@@ -1,20 +1,20 @@
 ASTRA - Final Project Reflection
 
 Project Overview:
-Astra is a Django-based platform empowering women through knowledge sharing, mentorship,
+Astra is a Django based platform empowering women through knowledge sharing, mentorship,
 and community building. Features include topic-based hubs, mentorship matching,
 interactive analytics, and a royal dark-mode UI inspired by Indian goddesses.
 
 Key Lessons Learned:
-- Full-stack Django development requires careful planning of models and relationships
+- Full stack Django development requires careful planning of models and relationships
   from the start. The UserProfile, Hub, Post, and MentorshipRequest models formed the
-  backbone of the entire application.
+  backbone of the entire application. Basically, ALWAYS remember MVT architecture!
 
 - UI/UX design significantly impacts user experience. Transitioning from multiple design
-  iterations to a final royal dark theme taught me the importance of restraint and
+  iterations to a final royal theme taught me the importance of restraint and
   purposeful design choices.
 
-- Vega-Lite charts require precise JSON formatting and proper data serialization.
+- Vega Lite charts require precise JSON formatting and proper data serialization.
   Debugging visualization issues taught me to use browser console tools effectively.
 
 - Django's ORM is incredibly powerful. Using select_related(), prefetch_related(), and
@@ -24,7 +24,7 @@ Key Lessons Learned:
   and proper session management ensures data privacy.
 
 Challenges Faced:
-- Getting Vega-Lite charts to render in the analytics dashboard required extensive
+- Getting Vega Lite charts to render in the analytics dashboard required extensive
   debugging of JSON serialization and proper template variable escaping.
 
 - Balancing a "royal" aesthetic with accessibility and readability took multiple
@@ -33,35 +33,27 @@ Challenges Faced:
 - Managing authentication flows across different user types (regular users, mentors, staff)
   required careful routing and permission checks.
 
-- Seeding realistic sample data was time-consuming but essential for demonstrating
+- Seeding realistic sample data was time consuming but essential for demonstrating
   the platform's functionality.
 
-- CSS styling in dark mode required attention to contrast ratios for accessibility while
+- CSS styling in quired attention to contrast ratios for accessibility while
   maintaining the desired aesthetic.
 
 Future Improvements:
 - Real-time notifications using Django Channels and WebSockets for mentorship requests
   and post comments.
-
 - Email notifications for mentorship updates using Django's email backend with
   Celery for async processing.
-
 - Full-text search functionality across posts, comments, and profiles using
   PostgreSQL's pg_trgm extension.
-
 - Integration with external APIs for location-based features (local women's organizations)
   or industry news feeds relevant to each hub.
-
 - Mobile app development using React Native or Flutter that consumes the existing
   JSON API endpoints.
-
 - Two-factor authentication using django-otp for enhanced security.
-
 - Advanced analytics including user engagement metrics, content quality scores,
   and mentorship success tracking.
-
 - Video upload functionality for tutorial posts using cloud storage (AWS S3/Cloudinary).
-
 - AI-powered content moderation using OpenAI API to detect and flag inappropriate content.
 
 Technical Achievements:
@@ -73,6 +65,5 @@ Technical Achievements:
 - Created a professional dark-mode UI with cultural inspiration
 - Seeded database with 100+ posts, 50+ users, and realistic sample data
 
-This project demonstrates my ability to design, develop, and deploy a production-ready
-Django application that solves a real-world problem while maintaining professional
-code quality and user experience standards.
+This project has been amazing to work on - I've basically revised everything I learned during the duration of the class. I can now confidently explain to another person what an API is, how it's pulled, or how to display charts and visualisations or even simple CRUD functionality.
+I know so much more than I did 3 months ago and to me that is a significant achievement. Thank you to Mohit, our instructor and my fellow peers for always pushing me to be my best - I will never forget it !

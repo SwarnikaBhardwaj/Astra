@@ -11,16 +11,13 @@ import json
 
 @login_required
 def home(request):
-    """Landing page with recent posts"""
     if request.user.is_authenticated:
-        # Show personalized feed for logged-in users
         joined_hubs = request.user.joined_hubs.all()
         if joined_hubs.exists():
             posts = Post.objects.filter(hub__in=joined_hubs).select_related('author', 'hub')[:20]
         else:
             posts = Post.objects.all().select_related('author', 'hub')[:20]
     else:
-        # Show featured posts for anonymous users
         posts = Post.objects.all().select_related('author', 'hub')[:10]
 
     hubs = Hub.objects.annotate(member_count=Count('members'))[:6]
@@ -33,17 +30,14 @@ def home(request):
 
 @login_required
 def about(request):
-    """About page"""
     return render(request, 'core/about.html')
 
 
 def signup(request):
-    """User registration"""
     if request.method == 'POST':
         form = SignUpForm(request.POST)
         if form.is_valid():
             user = form.save()
-            # Create user profile
             UserProfile.objects.create(
                 user=user,
                 bio=form.cleaned_data.get('bio', '')
@@ -58,7 +52,6 @@ def signup(request):
 
 
 def login_view(request):
-    """User login"""
     if request.method == 'POST':
         username = request.POST['username']
         password = request.POST['password']
@@ -75,14 +68,12 @@ def login_view(request):
 
 
 def logout_view(request):
-    """User logout"""
     logout(request)
     messages.info(request, 'You have been logged out.')
     return redirect('core:login')
 
 @login_required
 def hub_list(request):
-    """List all hubs"""
     hubs = Hub.objects.annotate(
         member_count=Count('members'),
         post_count=Count('posts')
@@ -92,11 +83,8 @@ def hub_list(request):
 
 @login_required
 def hub_detail(request, slug):
-    """Hub detail with posts"""
     hub = get_object_or_404(Hub, slug=slug)
     posts = hub.posts.all().select_related('author', 'hub')
-
-    # Check if user is a member
     is_member = request.user.is_authenticated and hub.members.filter(id=request.user.id).exists()
 
     context = {
@@ -109,7 +97,6 @@ def hub_detail(request, slug):
 
 @login_required
 def join_hub(request, slug):
-    """Join or leave a hub"""
     hub = get_object_or_404(Hub, slug=slug)
 
     if hub.members.filter(id=request.user.id).exists():
@@ -123,11 +110,8 @@ def join_hub(request, slug):
 
 
 def post_detail(request, pk):
-    """Post detail with comments"""
     post = get_object_or_404(Post.objects.select_related('author', 'hub'), pk=pk)
     comments = post.comments.all().select_related('author')
-
-    # Check if user has voted
     user_voted = False
     if request.user.is_authenticated:
         user_voted = HelpfulVote.objects.filter(user=request.user, post=post).exists()
@@ -155,7 +139,6 @@ def post_detail(request, pk):
 
 @login_required
 def post_create(request):
-    """Create a new post"""
     if request.method == 'POST':
         form = PostForm(request.POST)
         if form.is_valid():
@@ -172,7 +155,6 @@ def post_create(request):
 
 @login_required
 def post_edit(request, pk):
-    """Edit existing post"""
     post = get_object_or_404(Post, pk=pk, author=request.user)
 
     if request.method == 'POST':
@@ -189,7 +171,6 @@ def post_edit(request, pk):
 
 @login_required
 def post_delete(request, pk):
-    """Delete post"""
     post = get_object_or_404(Post, pk=pk, author=request.user)
 
     if request.method == 'POST':
@@ -202,7 +183,6 @@ def post_delete(request, pk):
 
 @login_required
 def vote_helpful(request, pk):
-    """Vote post as helpful"""
     post = get_object_or_404(Post, pk=pk)
 
     vote, created = HelpfulVote.objects.get_or_create(user=request.user, post=post)
@@ -222,7 +202,6 @@ def vote_helpful(request, pk):
 
 @login_required
 def add_comment(request, post_pk):
-    """Add comment to post"""
     post = get_object_or_404(Post, pk=post_pk)
 
     if request.method == 'POST':
@@ -238,7 +217,6 @@ def add_comment(request, post_pk):
 
 
 def profile_view(request, username):
-    """View user profile"""
     from django.contrib.auth.models import User
     user = get_object_or_404(User, username=username)
     profile = user.profile
@@ -254,7 +232,6 @@ def profile_view(request, username):
 
 @login_required
 def profile_edit(request, username):
-    """Edit own profile"""
     if request.user.username != username:
         messages.error(request, 'You can only edit your own profile.')
         return redirect('core:profile_view', username=username)
@@ -274,14 +251,12 @@ def profile_edit(request, username):
 
 
 def mentor_list(request):
-    """List all mentors"""
     mentors = UserProfile.objects.filter(is_mentor=True).select_related('user')
     return render(request, 'core/mentor_list.html', {'mentors': mentors})
 
 
 @login_required
 def request_mentorship(request, username):
-    """Request mentorship from a mentor"""
     from django.contrib.auth.models import User
     mentor = get_object_or_404(User, username=username)
 
@@ -306,7 +281,6 @@ def request_mentorship(request, username):
 
 @login_required
 def mentorship_dashboard(request):
-    """View mentorship requests (sent and received)"""
     sent_requests = MentorshipRequest.objects.filter(mentee=request.user).select_related('mentor')
     received_requests = MentorshipRequest.objects.filter(mentor=request.user).select_related('mentee')
 
@@ -319,7 +293,6 @@ def mentorship_dashboard(request):
 
 @login_required
 def update_mentorship_status(request, pk):
-    """Accept/decline mentorship request"""
     mentorship_request = get_object_or_404(MentorshipRequest, pk=pk, mentor=request.user)
 
     if request.method == 'POST':
@@ -334,20 +307,12 @@ def update_mentorship_status(request, pk):
 
 @staff_member_required
 def analytics_dashboard(request):
-    """Analytics dashboard for staff (with Vega-Lite charts)"""
-
-    # Get hub stats for chart
-    hubs = Hub.objects.annotate(
         member_count=Count('members'),
         post_count=Count('posts')
     ).values('name', 'icon', 'member_count', 'post_count')
-
-    # Get skills distribution
     skills = Skill.objects.annotate(
         user_count=Count('users')
     ).filter(user_count__gt=0).order_by('-user_count')[:10]
-
-    # Prepare data for Vega-Lite
     hub_data = [
         {'hub': h['name'], 'posts': h['post_count'], 'members': h['member_count']}
         for h in hubs
@@ -357,8 +322,6 @@ def analytics_dashboard(request):
         {'skill': s.name, 'users': s.user_count}
         for s in skills
     ]
-
-    # Mentorship stats
     mentorship_stats = {
         'pending': MentorshipRequest.objects.filter(status='pending').count(),
         'accepted': MentorshipRequest.objects.filter(status='accepted').count(),
@@ -392,15 +355,10 @@ def export_portfolio(request, username):
 
     from django.contrib.auth.models import User
     user = get_object_or_404(User, username=username)
-
-    # Create the HttpResponse object with CSV header
     response = HttpResponse(content_type='text/csv')
     response['Content-Disposition'] = f'attachment; filename="{username}_portfolio.csv"'
-
     writer = csv.writer(response)
     writer.writerow(['Type', 'Title', 'Hub', 'Date', 'Helpful Count', 'Comments'])
-
-    # Add posts
     for post in user.posts.all():
         writer.writerow([
             post.get_post_type_display(),

@@ -1,4 +1,4 @@
-# Astra - Women's Empowerment Platform
+# Astra - For women, by women 
 
 A Django web application that empowers women through knowledge sharing, mentorship, and community building. Meant to be a safe space for them to share experiences, stories, advice and support each other in a world that doesn't support them.
 
@@ -36,13 +36,13 @@ You can log in with these accounts:
 ## Main Features
 
 ### Community Hubs
-There are 7 different hubs you can join - STEM, Entrepreneurship, Health, Legal Rights, Caregiving, Creative Arts, and Leadership. Each one has its own posts and community.
+There are 7 different hubs you can join for now - STEM, Entrepreneurship, Health, Legal Rights, Caregiving, Creative Arts, and Leadership. Each one has its own posts and community.
 
 ### Posts and Comments
 You can create different types of posts (questions, tutorials, stories, resources). Other users can comment, and you can mark posts as "helpful" which increases the author's reputation.
 
 ### Mentorship System
-If you're a mentor, people can send you mentorship requests. You can accept or decline them. There's a whole dashboard to manage this.
+If you're a mentor people can send you mentorship requests. You can accept or decline them. There's a whole dashboard to manage this.
 
 ### User Profiles
 Every user has a profile showing their bio, skills, badges, and all their posts. You can also download your portfolio as a CSV file.
@@ -151,7 +151,7 @@ astra-women-platform/
 
 ## Design Philosophy
 
-The whole look is meant to be royal and powerful but still welcoming. Dark mode with deep blue and gold accents. Inspired by Indian goddesses and mandala art. No unnecessary animations or playful stuff - kept it serious and professional.
+The whole look is meant to be royal and powerful but still welcoming with deep blue and gold accents. Inspired by Indian goddesses and mandala art. No unnecessary animations or playful stuff - kept it serious and professional.
 
 Used proper fonts (Crimson Text for headings, Montserrat for body text) and made sure everything has good contrast for accessibility.
 

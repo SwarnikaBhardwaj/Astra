@@ -1,9 +1,9 @@
 # ASTRA - Topics Implementation Summary
 
 ## Basic Info
-- Project Name: Astra - Women's Empowerment Platform
+- Project Name: Astra 
 - GitHub: https://github.com/SwarnikaBhardwaj/Astra.git
-- Deployed URL: 
+- Deployed URL: https://astra-ubml.onrender.com
 
 ---
 
@@ -59,18 +59,18 @@ Where to find it: core/views.py (look for @login_required and @staff_member_requ
 
 ### 6. Deployment (2 pts)
 What I did:
-- [Will fill this in after deploying]
+- Make build and yaml file
 - Set up production settings
 - Got static files working
-- Deployed to [platform name]
+- Deployed to Render
 
-Where to find it: Deployed URL
+Where to find it: https://astra-ubml.onrender.com
 
 ---
 
 ## TABLE 2: ADD-ON TOPICS (15 points minimum, I did 21)
 
-You only need 5 of these, but I did 7 because why not.
+You only need 5 of these, but I did 7 because why not :)
 
 ### 1. ORM Queries and Summaries (3 pts)
 What I did:
@@ -151,14 +151,14 @@ What I did:
 - Added another chart using Matplotlib (different from Vega-Lite)
 - Shows post activity over the last 7 days as a line graph
 - Saved as an image and displayed on analytics page
-- Also styled to match the dark theme
+- Also styled to match the theme
 
 Where to find it: generate_matplotlib_chart function in core/views.py
 
 
 ---
 
-## OTHER STUFF I BUILT (not required but cool)
+## OTHER STUFF I BUILT (not required but I thought would be cool)
 
 - Complete mentorship system where people can request mentors
 - Voting system where you can mark posts as helpful
